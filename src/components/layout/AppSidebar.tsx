@@ -1,118 +1,190 @@
-import { Link, useRouterState } from "@tanstack/react-router";
-import { LayoutDashboard, Ticket, Users, BarChart3, Settings, Sparkles } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
+import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
+import {
+  AlertTriangle,
+  BarChart3,
+  ChevronsUpDown,
+  CircleUser,
+  Inbox,
+  LayoutDashboard,
+  LogOut,
+  Moon,
+  Settings,
+  Sun,
+  Ticket,
+  UserX,
+  Users,
+  Zap,
+} from "lucide-react";
+import { UserAvatar } from "@/components/common/misc";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
+  SidebarGroup,
+  SidebarGroupContent,
+  SidebarGroupLabel,
   SidebarHeader,
   SidebarMenu,
+  SidebarMenuBadge,
   SidebarMenuButton,
   SidebarMenuItem,
-  SidebarGroup,
-  SidebarGroupLabel,
-  SidebarGroupContent,
+  useSidebar,
 } from "@/components/ui/sidebar";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { useAuth } from "@/hooks/useAuth";
-import { useDashboard } from "@/hooks/useDashboard";
-
-const MAIN_NAV = [
-  { title: "Dashboard", url: "/", icon: LayoutDashboard },
-  { title: "Tickets", url: "/tickets", icon: Ticket },
-  { title: "Customers", url: "/customers", icon: Users },
-  { title: "Analytics", url: "/analytics", icon: BarChart3 },
-];
-
-const SETTINGS_NAV = [
-  { title: "Settings", url: "/settings", icon: Settings },
-];
+import { logout, useMe } from "@/lib/auth";
+import { dashboardQuery } from "@/lib/queries";
+import { useTheme } from "@/lib/theme";
+import { Logo } from "./Logo";
 
 export function AppSidebar() {
-  const routerState = useRouterState();
-  const currentPath = routerState.location.pathname;
-  const { user } = useAuth();
-  const { data: dashboard } = useDashboard();
-  const totalTickets = dashboard?.stats?.total || 0;
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const search = useRouterState({ select: (s) => s.location.searchStr });
+  const { data } = useQuery(dashboardQuery);
+  const { user, workspace } = useMe();
+  const { theme, toggle } = useTheme();
+  const navigate = useNavigate();
+  const { setOpenMobile, state } = useSidebar();
+  const c = data?.counts;
+
+  const close = () => setOpenMobile(false);
+  const isActive = (to: string) => (to === "/" ? pathname === "/" : pathname.startsWith(to));
+
+  const main = [
+    { title: "Dashboard", to: "/", icon: LayoutDashboard },
+    { title: "Tickets", to: "/tickets", icon: Ticket, badge: c?.active },
+    { title: "Customers", to: "/customers", icon: Users },
+    { title: "Analytics", to: "/analytics", icon: BarChart3 },
+  ] as const;
+
+  const views = [
+    { title: "My open tickets", icon: CircleUser, search: { assignee: "me", status: ["Open", "In Progress", "Pending"] }, badge: c?.mine, key: "assignee=me" },
+    { title: "Unassigned", icon: UserX, search: { assignee: "unassigned", status: ["Open", "In Progress", "Pending"] }, badge: c?.unassigned, key: "assignee=unassigned" },
+    { title: "Urgent", icon: Zap, search: { priority: ["Urgent"], status: ["Open", "In Progress", "Pending"] }, badge: c?.urgent, key: "priority=" },
+    { title: "SLA breached", icon: AlertTriangle, search: { sla: "breached", status: ["Open", "In Progress", "Pending"] }, badge: c?.breached, key: "sla=breached" },
+  ] as const;
 
   return (
-    <Sidebar className="border-r">
-      <SidebarHeader className="h-16 justify-center px-4">
-        <div className="flex items-center gap-2 px-2">
-          <div className="flex size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground shadow-sm">
-            <Sparkles className="size-4" />
-          </div>
-          <span className="text-lg font-bold tracking-tight">SupportFlow</span>
-        </div>
+    <Sidebar collapsible="icon">
+      <SidebarHeader className="h-14 justify-center border-b px-3">
+        <Link to="/" onClick={close}>
+          <Logo collapsed={state === "collapsed"} />
+        </Link>
       </SidebarHeader>
 
-      <SidebarContent className="px-3 py-4">
+      <SidebarContent className="pt-2">
         <SidebarGroup>
-          <SidebarGroupLabel className="px-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-            Overview
-          </SidebarGroupLabel>
-          <SidebarGroupContent className="mt-2">
-            <SidebarMenu>
-              {MAIN_NAV.map((item) => {
-                const badge = item.title === "Tickets" && totalTickets > 0 ? totalTickets.toString() : undefined;
-                return (
-                  <SidebarMenuItem key={item.title}>
-                    <SidebarMenuButton
-                      asChild
-                      isActive={currentPath === item.url || (item.url !== "/" && currentPath.startsWith(item.url))}
-                      tooltip={item.title}
-                    >
-                      <Link to={item.url} className="flex items-center justify-between">
-                        <div className="flex items-center gap-3">
-                          <item.icon className="size-4" />
-                          <span>{item.title}</span>
-                        </div>
-                        {badge && (
-                          <span className="flex h-5 items-center justify-center rounded-full bg-primary/10 px-2 text-[10px] font-medium text-primary">
-                            {badge}
-                          </span>
-                        )}
-                      </Link>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                );
-              })}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
-
-        <SidebarGroup className="mt-auto pt-8">
           <SidebarGroupContent>
             <SidebarMenu>
-              {SETTINGS_NAV.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton
-                    asChild
-                    isActive={currentPath === item.url}
-                    tooltip={item.title}
-                  >
-                    <Link to={item.url}>
-                      <item.icon className="size-4" />
+              {main.map((item) => (
+                <SidebarMenuItem key={item.to}>
+                  <SidebarMenuButton asChild isActive={isActive(item.to) && !(item.to === "/tickets" && views.some((v) => search.includes(v.key)))} tooltip={item.title}>
+                    <Link to={item.to} onClick={close}>
+                      <item.icon />
                       <span>{item.title}</span>
                     </Link>
                   </SidebarMenuButton>
+                  {"badge" in item && !!item.badge && <SidebarMenuBadge className="tabular">{item.badge}</SidebarMenuBadge>}
                 </SidebarMenuItem>
               ))}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
+
+        <SidebarGroup>
+          <SidebarGroupLabel>Views</SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              {views.map((v) => (
+                <SidebarMenuItem key={v.title}>
+                  <SidebarMenuButton
+                    asChild
+                    tooltip={v.title}
+                    isActive={pathname === "/tickets" && search.includes(v.key)}
+                  >
+                    <Link to="/tickets" search={v.search as never} onClick={close}>
+                      <v.icon />
+                      <span>{v.title}</span>
+                    </Link>
+                  </SidebarMenuButton>
+                  {!!v.badge && (
+                    <SidebarMenuBadge className={v.title === "SLA breached" ? "tabular text-destructive" : "tabular"}>
+                      {v.badge}
+                    </SidebarMenuBadge>
+                  )}
+                </SidebarMenuItem>
+              ))}
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+
+        <SidebarGroup className="mt-auto">
+          <SidebarGroupContent>
+            <SidebarMenu>
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild isActive={isActive("/settings")} tooltip="Settings">
+                  <Link to="/settings" onClick={close}>
+                    <Settings />
+                    <span>Settings</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
       </SidebarContent>
 
-      <SidebarFooter className="border-t p-4">
-        <div className="flex items-center gap-3 rounded-xl bg-muted/50 p-2">
-          <Avatar className="h-9 w-9 border border-border/50">
-            <AvatarImage src={`https://api.dicebear.com/7.x/notionists/svg?seed=${user?.name || 'User'}&backgroundColor=e2e8f0`} alt={user?.name || "User"} />
-            <AvatarFallback>{user?.name?.charAt(0) || "U"}</AvatarFallback>
-          </Avatar>
-          <div className="flex flex-1 flex-col overflow-hidden">
-            <span className="truncate text-sm font-medium leading-none">{user?.name || "Support Agent"}</span>
-            <span className="truncate text-xs text-muted-foreground mt-1">{user?.email || "agent@supportflow.com"}</span>
-          </div>
-        </div>
+      <SidebarFooter className="border-t">
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <SidebarMenuButton size="lg" className="data-[state=open]:bg-sidebar-accent">
+                  <UserAvatar name={user.name} className="size-8" />
+                  <div className="grid flex-1 text-left leading-tight">
+                    <span className="truncate text-sm font-medium">{user.name}</span>
+                    <span className="truncate text-xs text-muted-foreground">{workspace?.name}</span>
+                  </div>
+                  <ChevronsUpDown className="ml-auto size-4 text-muted-foreground" />
+                </SidebarMenuButton>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent side="top" align="start" className="w-60">
+                <DropdownMenuLabel className="font-normal">
+                  <p className="text-sm font-medium">{user.name}</p>
+                  <p className="truncate text-xs text-muted-foreground">{user.email}</p>
+                </DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={() => navigate({ to: "/settings" })}>
+                  <CircleUser className="mr-2 size-4" /> Profile & workspace
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={toggle}>
+                  {theme === "dark" ? <Sun className="mr-2 size-4" /> : <Moon className="mr-2 size-4" />}
+                  {theme === "dark" ? "Light mode" : "Dark mode"}
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => navigate({ to: "/tickets", search: { status: ["Open"] } as never })}>
+                  <Inbox className="mr-2 size-4" /> Open queue
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem
+                  className="text-destructive focus:text-destructive"
+                  onClick={() => {
+                    logout();
+                    navigate({ to: "/login" });
+                  }}
+                >
+                  <LogOut className="mr-2 size-4" /> Sign out
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </SidebarMenuItem>
+        </SidebarMenu>
       </SidebarFooter>
     </Sidebar>
   );

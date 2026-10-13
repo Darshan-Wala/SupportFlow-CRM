@@ -1,11 +1,28 @@
+
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "services": {
-    "app": { "root": ".", "framework": "tanstack-start-lovable" },
-    "backend": { "root": "backend", "framework": "express" }
+    "app": {
+      "root": ".",
+      "framework": "vite"
+    },
+    "backend": {
+      "root": "backend",
+      "framework": "express"
+    }
   },
   "rewrites": [
-    { "source": "/api/(.*)", "destination": { "service": "backend" } },
-    { "source": "/(.*)", "destination": { "service": "app" } }
+    {
+      "source": "/api/(.*)",
+      "destination": {
+        "service": "backend"
+      }
+    },
+    {
+      "source": "/(.*)",
+      "destination": {
+        "service": "app"
+      }
+    }
   ]
 }

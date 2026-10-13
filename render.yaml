@@ -1,0 +1,19 @@
+# Optional: deploy the API (and the built web app) as a single Render web service.
+# The primary deployment target is Vercel — see README.
+services:
+  - type: web
+    name: supportflow
+    runtime: node
+    plan: free
+    buildCommand: npm install --include=dev && npm run build && npm run build:server
+    startCommand: npm start
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_URL
+        sync: false
+      - key: JWT_SECRET
+        generateValue: true
+      - key: GEMINI_API_KEY
+        sync: false

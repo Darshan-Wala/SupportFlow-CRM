@@ -1,143 +1,24 @@
-# =========================
-# Operating System Files
-# =========================
-.DS_Store
-.DS_Store?
-._*
-.Spotlight-V100
-.Trashes
-ehthumbs.db
-Thumbs.db
-desktop.ini
-
-# =========================
-# Editor & IDE Files
-# =========================
-.vscode/*
-!.vscode/extensions.json
-!.vscode/settings.json
-!.vscode/launch.json
-.idea/
-.project
-.classpath
-.cproject
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.sw?
-*.vim
-*~
-
-# =========================
-# Node.js & Dependencies
-# =========================
+# dependencies
 node_modules/
-jspm_packages/
-web_modules/
-package-lock.json
-backend/package-lock.json
-# (Note: You may want to commit package-lock.json if you aren't using yarn/pnpm, 
-# but uncomment the line below if you wish to ignore it)
-# package-lock.json
-yarn-error.log
-.pnp.*
-.yarn/*
-!.yarn/patches
-!.yarn/plugins
-!.yarn/releases
-!.yarn/sdks
-!.yarn/versions
 
-# =========================
-# Build Outputs & Caches
-# =========================
+# builds
 dist/
-dist-ssr/
-build/
-.output/
-.vinxi/
-.nitro/
-.next/
-out/
-.nuxt/
-.cache/
-.parcel-cache/
-.fusebox/
-.docusaurus/
-.vuepress/dist/
-.temp/
-
-# =========================
-# TanStack & Vite specific
-# =========================
-.tanstack/
-vite.config.ts.timestamp-*
+dist-server/
+.vercel/
 *.tsbuildinfo
 
-# =========================
-# Logs & Diagnostic Reports
-# =========================
-logs
+# local data & env
+.data/
+.env
+.env.*
+!.env.example
+
+# logs / OS / editors
 *.log
 npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-pnpm-debug.log*
-lerna-debug.log*
-report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
-
-# =========================
-# Environment Variables (CRITICAL)
-# =========================
-.env
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
-.env.staging
-.dev.vars
-backend/.env
-backend/.env.local
-backend/.env.*
-
-# =========================
-# Prisma & Database
-# =========================
-/src/generated/prisma
-/backend/prisma/db/
-*.db
-*.db-journal
-*.sqlite
-*.sqlite-journal
-
-# =========================
-# Cloudflare & Serverless
-# =========================
-.wrangler/
-.serverless/
-
-# =========================
-# Testing Coverage
-# =========================
-coverage/
-.nyc_output/
-.lcov
-
-# =========================
-# Linter & Misc Caches
-# =========================
-.eslintcache
-.stylelintcache
-.npm/
-.rpt2_cache/
-.rts2_cache_cjs/
-.rts2_cache_es/
-.rts2_cache_umd/
-.node_repl_history
-*.tgz
-
-# =========================
-# Lovable
-# =========================
-.lovable/
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/*
+!.vscode/extensions.json
+.tanstack/

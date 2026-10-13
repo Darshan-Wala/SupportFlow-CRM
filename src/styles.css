@@ -1,5 +1,4 @@
-@import "tailwindcss" source(none);
-@source "../src";
+@import "tailwindcss";
 @import "tw-animate-css";
 
 @custom-variant dark (&:is(.dark *));
@@ -12,6 +11,13 @@
   --radius-2xl: calc(var(--radius) + 8px);
   --radius-3xl: calc(var(--radius) + 12px);
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+  --color-series-1: var(--series-1);
+  --color-series-2: var(--series-2);
+  --color-series-3: var(--series-3);
+  --color-series-4: var(--series-4);
+  --color-series-5: var(--series-5);
+  --color-series-6: var(--series-6);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -56,7 +62,7 @@
 }
 
 :root {
-  --radius: 1rem;
+  --radius: 0.625rem;
   --background: oklch(0.984 0.005 247);
   --foreground: oklch(0.21 0.04 265);
   --card: oklch(1 0 0);
@@ -95,6 +101,18 @@
   --sidebar-accent-foreground: oklch(0.35 0.15 262);
   --sidebar-border: oklch(0.93 0.013 256);
   --sidebar-ring: oklch(0.546 0.215 262);
+  --series-1: #2a78d6;
+  --series-2: #eb6834;
+  --series-3: #1baf7a;
+  --series-4: #eda100;
+  --series-5: #e87ba4;
+  --series-6: #6250d6;
+  --chart-grid: oklch(0.92 0.013 256);
+  /* ordinal ramp (Low → Urgent), single hue */
+  --seq-1: #86b6ef;
+  --seq-2: #5598e7;
+  --seq-3: #256abf;
+  --seq-4: #104281;
 }
 
 .dark {
@@ -136,6 +154,17 @@
   --sidebar-accent-foreground: oklch(0.85 0.1 262);
   --sidebar-border: oklch(1 0 0 / 8%);
   --sidebar-ring: oklch(0.65 0.2 262);
+  --series-1: #3987e5;
+  --series-2: #d95926;
+  --series-3: #199e70;
+  --series-4: #c98500;
+  --series-5: #d55181;
+  --series-6: #9085e9;
+  --chart-grid: oklch(1 0 0 / 8%);
+  --seq-1: #184f95;
+  --seq-2: #256abf;
+  --seq-3: #5598e7;
+  --seq-4: #9ec5f4;
 }
 
 @layer base {
@@ -148,4 +177,31 @@
     color: var(--color-foreground);
     -webkit-font-smoothing: antialiased;
   }
+}
+
+@layer base {
+  body {
+    font-feature-settings: "cv11", "ss01";
+  }
+  ::selection {
+    background: color-mix(in oklch, var(--primary) 25%, transparent);
+  }
+}
+
+@layer utilities {
+  .tabular {
+    font-variant-numeric: tabular-nums;
+  }
+  .scrollbar-thin {
+    scrollbar-width: thin;
+  }
+}
+
+/* Recharts: keep axes recessive and tooltips on-theme */
+.recharts-cartesian-grid line {
+  stroke: var(--chart-grid);
+}
+.recharts-text {
+  fill: var(--muted-foreground);
+  font-size: 11px;
 }

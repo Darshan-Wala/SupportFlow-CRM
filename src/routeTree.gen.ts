@@ -9,18 +9,20 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as SettingsRouteImport } from './routes/settings'
+import { Route as AppRouteImport } from './routes/_app'
 import { Route as LoginRouteImport } from './routes/login'
-import { Route as CustomersRouteImport } from './routes/customers'
-import { Route as AnalyticsRouteImport } from './routes/analytics'
-import { Route as IndexRouteImport } from './routes/index'
-import { Route as TicketsIndexRouteImport } from './routes/tickets.index'
-import { Route as TicketsCreateRouteImport } from './routes/tickets.create'
-import { Route as TicketsTicketIdRouteImport } from './routes/tickets.$ticketId'
+import { Route as RegisterRouteImport } from './routes/register'
+import { Route as AppIndexRouteImport } from './routes/_app/index'
+import { Route as AppAnalyticsRouteImport } from './routes/_app/analytics'
+import { Route as AppSettingsRouteImport } from './routes/_app/settings'
+import { Route as AppCustomersIndexRouteImport } from './routes/_app/customers/index'
+import { Route as AppCustomersCustomerIdRouteImport } from './routes/_app/customers/$customerId'
+import { Route as AppTicketsIndexRouteImport } from './routes/_app/tickets/index'
+import { Route as AppTicketsTicketIdRouteImport } from './routes/_app/tickets/$ticketId'
+import { Route as AppTicketsNewRouteImport } from './routes/_app/tickets/new'
 
-const SettingsRoute = SettingsRouteImport.update({
-  id: '/settings',
-  path: '/settings',
+const AppRoute = AppRouteImport.update({
+  id: '/_app',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LoginRoute = LoginRouteImport.update({
@@ -28,119 +30,143 @@ const LoginRoute = LoginRouteImport.update({
   path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
-const CustomersRoute = CustomersRouteImport.update({
-  id: '/customers',
-  path: '/customers',
+const RegisterRoute = RegisterRouteImport.update({
+  id: '/register',
+  path: '/register',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AnalyticsRoute = AnalyticsRouteImport.update({
-  id: '/analytics',
-  path: '/analytics',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const IndexRoute = IndexRouteImport.update({
+const AppIndexRoute = AppIndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => AppRoute,
 } as any)
-const TicketsIndexRoute = TicketsIndexRouteImport.update({
+const AppAnalyticsRoute = AppAnalyticsRouteImport.update({
+  id: '/analytics',
+  path: '/analytics',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppSettingsRoute = AppSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppCustomersIndexRoute = AppCustomersIndexRouteImport.update({
+  id: '/customers/',
+  path: '/customers/',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppCustomersCustomerIdRoute = AppCustomersCustomerIdRouteImport.update({
+  id: '/customers/$customerId',
+  path: '/customers/$customerId',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppTicketsIndexRoute = AppTicketsIndexRouteImport.update({
   id: '/tickets/',
   path: '/tickets/',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => AppRoute,
 } as any)
-const TicketsCreateRoute = TicketsCreateRouteImport.update({
-  id: '/tickets/create',
-  path: '/tickets/create',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const TicketsTicketIdRoute = TicketsTicketIdRouteImport.update({
+const AppTicketsTicketIdRoute = AppTicketsTicketIdRouteImport.update({
   id: '/tickets/$ticketId',
   path: '/tickets/$ticketId',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => AppRoute,
+} as any)
+const AppTicketsNewRoute = AppTicketsNewRouteImport.update({
+  id: '/tickets/new',
+  path: '/tickets/new',
+  getParentRoute: () => AppRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
-  '/analytics': typeof AnalyticsRoute
-  '/customers': typeof CustomersRoute
+  '/': typeof AppIndexRoute
   '/login': typeof LoginRoute
-  '/settings': typeof SettingsRoute
-  '/tickets/$ticketId': typeof TicketsTicketIdRoute
-  '/tickets/create': typeof TicketsCreateRoute
-  '/tickets/': typeof TicketsIndexRoute
+  '/register': typeof RegisterRoute
+  '/analytics': typeof AppAnalyticsRoute
+  '/settings': typeof AppSettingsRoute
+  '/customers/$customerId': typeof AppCustomersCustomerIdRoute
+  '/tickets/$ticketId': typeof AppTicketsTicketIdRoute
+  '/tickets/new': typeof AppTicketsNewRoute
+  '/customers/': typeof AppCustomersIndexRoute
+  '/tickets/': typeof AppTicketsIndexRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
-  '/analytics': typeof AnalyticsRoute
-  '/customers': typeof CustomersRoute
   '/login': typeof LoginRoute
-  '/settings': typeof SettingsRoute
-  '/tickets/$ticketId': typeof TicketsTicketIdRoute
-  '/tickets/create': typeof TicketsCreateRoute
-  '/tickets': typeof TicketsIndexRoute
+  '/register': typeof RegisterRoute
+  '/analytics': typeof AppAnalyticsRoute
+  '/settings': typeof AppSettingsRoute
+  '/': typeof AppIndexRoute
+  '/customers/$customerId': typeof AppCustomersCustomerIdRoute
+  '/tickets/$ticketId': typeof AppTicketsTicketIdRoute
+  '/tickets/new': typeof AppTicketsNewRoute
+  '/customers': typeof AppCustomersIndexRoute
+  '/tickets': typeof AppTicketsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/': typeof IndexRoute
-  '/analytics': typeof AnalyticsRoute
-  '/customers': typeof CustomersRoute
+  '/_app': typeof AppRouteWithChildren
   '/login': typeof LoginRoute
-  '/settings': typeof SettingsRoute
-  '/tickets/$ticketId': typeof TicketsTicketIdRoute
-  '/tickets/create': typeof TicketsCreateRoute
-  '/tickets/': typeof TicketsIndexRoute
+  '/register': typeof RegisterRoute
+  '/_app/analytics': typeof AppAnalyticsRoute
+  '/_app/settings': typeof AppSettingsRoute
+  '/_app/': typeof AppIndexRoute
+  '/_app/customers/$customerId': typeof AppCustomersCustomerIdRoute
+  '/_app/tickets/$ticketId': typeof AppTicketsTicketIdRoute
+  '/_app/tickets/new': typeof AppTicketsNewRoute
+  '/_app/customers/': typeof AppCustomersIndexRoute
+  '/_app/tickets/': typeof AppTicketsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
-    | '/analytics'
-    | '/customers'
     | '/login'
+    | '/register'
+    | '/analytics'
     | '/settings'
+    | '/customers/$customerId'
     | '/tickets/$ticketId'
-    | '/tickets/create'
+    | '/tickets/new'
+    | '/customers/'
     | '/tickets/'
   fileRoutesByTo: FileRoutesByTo
   to:
-    | '/'
-    | '/analytics'
-    | '/customers'
     | '/login'
+    | '/register'
+    | '/analytics'
     | '/settings'
+    | '/'
+    | '/customers/$customerId'
     | '/tickets/$ticketId'
-    | '/tickets/create'
+    | '/tickets/new'
+    | '/customers'
     | '/tickets'
   id:
     | '__root__'
-    | '/'
-    | '/analytics'
-    | '/customers'
+    | '/_app'
     | '/login'
-    | '/settings'
-    | '/tickets/$ticketId'
-    | '/tickets/create'
-    | '/tickets/'
+    | '/register'
+    | '/_app/analytics'
+    | '/_app/settings'
+    | '/_app/'
+    | '/_app/customers/$customerId'
+    | '/_app/tickets/$ticketId'
+    | '/_app/tickets/new'
+    | '/_app/customers/'
+    | '/_app/tickets/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
-  AnalyticsRoute: typeof AnalyticsRoute
-  CustomersRoute: typeof CustomersRoute
+  AppRoute: typeof AppRouteWithChildren
   LoginRoute: typeof LoginRoute
-  SettingsRoute: typeof SettingsRoute
-  TicketsTicketIdRoute: typeof TicketsTicketIdRoute
-  TicketsCreateRoute: typeof TicketsCreateRoute
-  TicketsIndexRoute: typeof TicketsIndexRoute
+  RegisterRoute: typeof RegisterRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/settings': {
-      id: '/settings'
-      path: '/settings'
-      fullPath: '/settings'
-      preLoaderRoute: typeof SettingsRouteImport
+    '/_app': {
+      id: '/_app'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AppRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/login': {
@@ -150,71 +176,101 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/customers': {
-      id: '/customers'
-      path: '/customers'
-      fullPath: '/customers'
-      preLoaderRoute: typeof CustomersRouteImport
+    '/register': {
+      id: '/register'
+      path: '/register'
+      fullPath: '/register'
+      preLoaderRoute: typeof RegisterRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/analytics': {
-      id: '/analytics'
-      path: '/analytics'
-      fullPath: '/analytics'
-      preLoaderRoute: typeof AnalyticsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/': {
-      id: '/'
+    '/_app/': {
+      id: '/_app/'
       path: '/'
       fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof AppIndexRouteImport
+      parentRoute: typeof AppRoute
     }
-    '/tickets/': {
-      id: '/tickets/'
+    '/_app/analytics': {
+      id: '/_app/analytics'
+      path: '/analytics'
+      fullPath: '/analytics'
+      preLoaderRoute: typeof AppAnalyticsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/settings': {
+      id: '/_app/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof AppSettingsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/customers/': {
+      id: '/_app/customers/'
+      path: '/customers'
+      fullPath: '/customers/'
+      preLoaderRoute: typeof AppCustomersIndexRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/customers/$customerId': {
+      id: '/_app/customers/$customerId'
+      path: '/customers/$customerId'
+      fullPath: '/customers/$customerId'
+      preLoaderRoute: typeof AppCustomersCustomerIdRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/tickets/': {
+      id: '/_app/tickets/'
       path: '/tickets'
       fullPath: '/tickets/'
-      preLoaderRoute: typeof TicketsIndexRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof AppTicketsIndexRouteImport
+      parentRoute: typeof AppRoute
     }
-    '/tickets/create': {
-      id: '/tickets/create'
-      path: '/tickets/create'
-      fullPath: '/tickets/create'
-      preLoaderRoute: typeof TicketsCreateRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/tickets/$ticketId': {
-      id: '/tickets/$ticketId'
+    '/_app/tickets/$ticketId': {
+      id: '/_app/tickets/$ticketId'
       path: '/tickets/$ticketId'
       fullPath: '/tickets/$ticketId'
-      preLoaderRoute: typeof TicketsTicketIdRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof AppTicketsTicketIdRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/tickets/new': {
+      id: '/_app/tickets/new'
+      path: '/tickets/new'
+      fullPath: '/tickets/new'
+      preLoaderRoute: typeof AppTicketsNewRouteImport
+      parentRoute: typeof AppRoute
     }
   }
 }
 
+interface AppRouteChildren {
+  AppAnalyticsRoute: typeof AppAnalyticsRoute
+  AppSettingsRoute: typeof AppSettingsRoute
+  AppIndexRoute: typeof AppIndexRoute
+  AppCustomersCustomerIdRoute: typeof AppCustomersCustomerIdRoute
+  AppTicketsTicketIdRoute: typeof AppTicketsTicketIdRoute
+  AppTicketsNewRoute: typeof AppTicketsNewRoute
+  AppCustomersIndexRoute: typeof AppCustomersIndexRoute
+  AppTicketsIndexRoute: typeof AppTicketsIndexRoute
+}
+
+const AppRouteChildren: AppRouteChildren = {
+  AppAnalyticsRoute: AppAnalyticsRoute,
+  AppSettingsRoute: AppSettingsRoute,
+  AppIndexRoute: AppIndexRoute,
+  AppCustomersCustomerIdRoute: AppCustomersCustomerIdRoute,
+  AppTicketsTicketIdRoute: AppTicketsTicketIdRoute,
+  AppTicketsNewRoute: AppTicketsNewRoute,
+  AppCustomersIndexRoute: AppCustomersIndexRoute,
+  AppTicketsIndexRoute: AppTicketsIndexRoute,
+}
+
+const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
-  AnalyticsRoute: AnalyticsRoute,
-  CustomersRoute: CustomersRoute,
+  AppRoute: AppRouteWithChildren,
   LoginRoute: LoginRoute,
-  SettingsRoute: SettingsRoute,
-  TicketsTicketIdRoute: TicketsTicketIdRoute,
-  TicketsCreateRoute: TicketsCreateRoute,
-  TicketsIndexRoute: TicketsIndexRoute,
+  RegisterRoute: RegisterRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
