@@ -1,4 +1,5 @@
-# SupportFlow
+# SupportFlow Check out the live project here: [Support Flow CRM](https://support-flow-crm-chi.vercel.app/)
+
 
 **AI-powered customer support CRM and ticket management.** It's a full-stack app: React + TanStack on the frontend, an Express REST API, PostgreSQL (Neon) for storage, and Google Gemini for ticket analysis. It deploys to Vercel as **one project**.
 
